@@ -6,6 +6,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import router from './routes/message.js'
+
 var url = ''
 
 // verificar la conexion con mongodb 
@@ -31,7 +32,7 @@ app.use(bodyParser.json())
 app.use('/api', router)
 
 // Conexion a la base de datos
-mongoose.connect(url, { useNewUrlParser: true}).then(() => {
+mongoose.connect(url, { useNewUrlParser: true }).then(() => {
     console.log('Conexion a la base de datos establecida')
 
     // Escucha al puerto 
