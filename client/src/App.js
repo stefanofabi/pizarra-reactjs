@@ -19,7 +19,7 @@ function App() {
 
   useEffect(() => {
     const receivedMessage = (message) => {
-      setMessage([message, ...messages])
+      setMessages([message, ...messages])
     }
 
     socket.on('message', receivedMessage)
