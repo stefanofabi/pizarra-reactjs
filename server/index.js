@@ -34,6 +34,14 @@ app.use('/api', router)
 // Escuchar la conexión de los clientes
 io.on('connection', (socket) => {
     console.log('Llego el cliente '+ socket.id)
+
+    socket.on('message', (message, nickname) => {
+        // Envio al resto de clientes conectados
+        socket.broadcast.emit('message', {
+            body: message,
+            from: nickname
+        })
+    })
 })
 
 // Conexion a la base de datos
