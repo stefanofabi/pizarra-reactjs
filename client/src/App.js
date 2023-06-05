@@ -52,6 +52,7 @@ function App() {
         from: 'Yo'
       }
 
+      // Agregar el mensaje que envio el usuario a su lista de mensajes
       setMessages([newMessage, ... messages])
       setMessage('')
 
