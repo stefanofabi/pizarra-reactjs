@@ -1,7 +1,7 @@
 import './App.css';
 import io from 'socket.io-client';
 import axios from 'axios';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // Conexion para escuchar y enviar los eventos
 const socket = io('http://localhost:4000')
@@ -14,6 +14,21 @@ function App() {
   const [disabled, setDisabled] = useState(false)
   const [messages, setMessages] = useState([])
   
+  useEffect(() => {
+    const receivedMessage = (message) => {
+      setMessage([message, ...messages])
+    }
+
+    socket.on('message', receivedMessage)
+
+    // Desuscribimos el estado de este componente para cuando ya no es necesario
+    return () => {
+      socket.off('message', receivedMessage)
+    }
+
+    // actualizamos la vista cuando llega un nuevo mensaje
+  }, [messages])
+
   const handlerSubmit = (e) => {
     e.preventDefault()
 
