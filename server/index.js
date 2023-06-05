@@ -18,7 +18,7 @@ const PORT = 4000
 // Creamos el servidor con el modulo http por defecto en NodeJS
 const server = http.createServer(app)
 const io = new SocketServer(server, {
-    core: {
+    cors: {
         // permitimos peticiones de cualquier origen
         origin: '*'
     }
@@ -30,6 +30,11 @@ app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use('/api', router)
+
+// Escuchar la conexión de los clientes
+io.on('connection', (socket) => {
+    console.log('Llego el cliente '+ socket.id)
+})
 
 // Conexion a la base de datos
 mongoose.connect(url, { useNewUrlParser: true }).then(() => {
