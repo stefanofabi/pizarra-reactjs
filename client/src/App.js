@@ -14,6 +14,9 @@ function App() {
   const [disabled, setDisabled] = useState(false)
   const [messages, setMessages] = useState([])
   
+  const [storedMessages, setStoredMessages] = useState([])
+  const [firstTime, setFirstTime] = useState(false)
+
   useEffect(() => {
     const receivedMessage = (message) => {
       setMessage([message, ...messages])
@@ -28,6 +31,15 @@ function App() {
 
     // actualizamos la vista cuando llega un nuevo mensaje
   }, [messages])
+
+  if (! firstTime) {
+    axios.get(url + 'messages').then(res => {
+      setStoredMessages(res.data.messages)
+      console.log(res.data.messages)
+      // Solo se ejecuta la primera vez que renderizamos la aplicacion
+      setFirstTime(true)
+    })
+  }
 
   const handlerSubmit = (e) => {
     e.preventDefault()
@@ -89,9 +101,35 @@ function App() {
         {/* Chat messages */}
         <div className="card mt-3 mb-3" id="content-chat">
           <div className="card-body"> 
+            {messages.map((message, index) => (
+              <div key={index} className={`d-flex p-3 ${message.from === "Yo" ? "justify-content-end" : "justify-content-start"}`}> 
+                <div className={`card mb-3 border-1 ${message.from === "Yo" ? "bg-success bg-opacity-25" : "bg-light"}`}> 
+                  <div className="card-body"> 
+                    <small> {message.from}: {message.body} </small>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* Chat stored messages */}
+            <small className="tex-center text-muted"> ... Mensajes guardados ... </small>
+            {storedMessages.map((message, index) => (
+              <div key={index} className={`d-flex p-3 ${message.from === nickname ? "justify-content-end" : "justify-content-start"}`}> 
+                <div className={`card mb-3 border-1 ${message.from === nickname ? "bg-success bg-opacity-25" : "bg-light"}`}> 
+                  <div className="card-body"> 
+                    <small> {message.from}: {message.message} </small>
+                  </div>
+                </div>
+              </div>
+            ))}
 
           </div>
         </div>
+
+
+
+
+
       </div>
     </div>
   );

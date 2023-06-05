@@ -7,7 +7,7 @@ import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import router from './routes/message.js'
 
-var url = 'mongodb+srv://stefanofabi:testingapp@cluster0.zy733mf.mongodb.net/'
+var url = ''
 
 // verificar la conexion con mongodb 
 mongoose.Promise = global.Promise
