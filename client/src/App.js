@@ -1,4 +1,9 @@
 import './App.css';
+import io from 'socket.io-client';
+import axios from 'axios';
+
+// Conexion para escuchar y enviar los eventos
+const socket = io('http://localhost:4000')
 
 function App() {
   return (
