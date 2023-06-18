@@ -6,9 +6,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import router from './routes/message.js'
-import {PORT} from './config.js'
-
-var url = ''
+import {PORT, url} from './config.js'
 
 const app = express()
 
