@@ -9,9 +9,6 @@ import router from './routes/message.js'
 
 var url = ''
 
-// verificar la conexion con mongodb 
-mongoose.Promise = global.Promise
-
 const app = express()
 const PORT = 4000
 
