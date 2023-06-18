@@ -53,6 +53,8 @@ function App() {
     axios.get(url + 'messages').then(res => {
       setStoredMessages(res.data.messages)
       console.log(res.data.messages)
+    }).catch(error => {
+      console.log('Error al obtener los mensajes guardados:', error);
     })
 
     // Solo se ejecuta la primera vez que renderizamos la aplicacion
