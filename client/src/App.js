@@ -17,6 +17,8 @@ function App() {
   const [storedMessages, setStoredMessages] = useState([])
   const [firstTime, setFirstTime] = useState(false)
 
+  const [usersOnline, setUsersOnline] = useState(0)
+
   useEffect(() => {
     const receivedMessage = (message) => {
       setMessages([message, ...messages])
@@ -32,13 +34,33 @@ function App() {
     // actualizamos la vista cuando llega un nuevo mensaje
   }, [messages])
 
+  useEffect(() => {
+    const usersOnlineMessage = (message) => {
+      setUsersOnline(message.count)
+    }
+
+    socket.on('usersOnline', usersOnlineMessage)
+
+    // Desuscribimos el estado de este componente para cuando ya no es necesario
+    return () => {
+      socket.off('usersOnline', usersOnlineMessage)
+    }
+
+    // actualizamos la vista cuando llega un nuevo mensaje
+  }, [usersOnline])
+
   if (! firstTime) {
     axios.get(url + 'messages').then(res => {
       setStoredMessages(res.data.messages)
       console.log(res.data.messages)
-      // Solo se ejecuta la primera vez que renderizamos la aplicacion
-      setFirstTime(true)
     })
+
+    axios.get(url + 'usersOnline').then(res => {
+      setUsersOnline(res.data.count + 1)
+    })
+
+    // Solo se ejecuta la primera vez que renderizamos la aplicacion
+    setFirstTime(true)
   }
 
   const handlerSubmit = (e) => {
@@ -75,6 +97,8 @@ function App() {
   return (
     <div className="App">
       <div className="container mt-3">
+        <div className="m-3 text-light"> Usuarios Online: {usersOnline} </div>
+
         <div className="card">
           <div className="card-body">
             <h5 className="text-center"> Chat </h5>
