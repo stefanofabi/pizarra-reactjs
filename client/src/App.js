@@ -55,10 +55,6 @@ function App() {
       console.log(res.data.messages)
     })
 
-    axios.get(url + 'usersOnline').then(res => {
-      setUsersOnline(res.data.count + 1)
-    })
-
     // Solo se ejecuta la primera vez que renderizamos la aplicacion
     setFirstTime(true)
   }

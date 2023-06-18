@@ -6,7 +6,6 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import router from './routes/message.js'
-import usersOnlineRouter from './routes/usersOnline.js'
 
 var url = ''
 
@@ -31,7 +30,6 @@ app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use('/api', router)
-app.use('/api', usersOnlineRouter)
 
 var usersOnline = 0;
 
@@ -41,7 +39,8 @@ io.on('connection', (socket) => {
     usersOnline++;
     console.log('Usuarios en linea: ' + usersOnline)
 
-    socket.broadcast.emit('usersOnline', {
+    // Enviamos un mensaje a todos los clientes, incluso al emisor
+    io.emit('usersOnline', {
         count: usersOnline
     })
 
@@ -58,11 +57,11 @@ io.on('connection', (socket) => {
         usersOnline--;
         console.log('Usuarios en linea: ' + usersOnline)
         
-        socket.broadcast.emit('usersOnline', {
+        // Enviamos un mensaje a todos los clientes, incluso al emisor
+        io.emit('usersOnline', {
             count: usersOnline
         })
     })
-
     
 })
 
@@ -74,6 +73,4 @@ mongoose.connect(url, { useNewUrlParser: true }).then(() => {
     server.listen(PORT, () => {
         console.log('Servidor ejecutandose en http://localhost:', PORT)
     })
-}) 
-
-export { usersOnline };
+})
