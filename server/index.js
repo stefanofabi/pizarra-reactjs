@@ -30,6 +30,7 @@ app.use(bodyParser.json())
 app.use('/api', router)
 
 var usersOnline = 0;
+var connectedUsers = {}
 
 // Escuchar la conexión de los clientes
 io.on('connection', (socket) => {
@@ -39,7 +40,8 @@ io.on('connection', (socket) => {
 
     // Enviamos un mensaje a todos los clientes, incluso al emisor
     io.emit('usersOnline', {
-        count: usersOnline
+        count: usersOnline,
+        users: Object.values(connectedUsers)
     })
 
     socket.on('message', (message, nickname) => {
@@ -50,17 +52,34 @@ io.on('connection', (socket) => {
         })
     })
 
+    // Escuchamos el evento cuando un cliente elige un nombre
+    socket.on('setNickname', (nickname) => {
+        connectedUsers[socket.id] = nickname;
+        console.log('Cliente ' + socket.id + ' estableció el nombre de usuario: ' + nickname);
+
+        // Enviamos un mensaje a todos los clientes, incluso al emisor
+        io.emit('usersOnline', {
+            count: usersOnline,
+            users: Object.values(connectedUsers)
+        })
+    });
+
     socket.on('disconnect', (message, nickname) => {
         console.log('Usuario desconectado '+ socket.id)
         usersOnline--;
         console.log('Usuarios en linea: ' + usersOnline)
-        
+
+        // Eliminamos el nombre de usuario del objeto connectedUsers
+        if (connectedUsers.hasOwnProperty(socket.id)) {
+            delete connectedUsers[socket.id];
+        }
+
         // Enviamos un mensaje a todos los clientes, incluso al emisor
         io.emit('usersOnline', {
-            count: usersOnline
+            count: usersOnline,
+            users: Object.values(connectedUsers)
         })
-    })
-    
+    })    
 })
 
 // Conexion a la base de datos
