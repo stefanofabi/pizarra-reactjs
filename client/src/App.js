@@ -2,10 +2,11 @@ import './App.css';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { useState, useEffect } from 'react'
+import config from './config.json';
 
 // Conexion para escuchar y enviar los eventos
-const socket = io('http://localhost:4000')
-const url = 'http://localhost:4000/api/'
+const socket = io(config.socketUrl)
+const url = config.apiUrl
 
 function App() {
  {/* Variables de estado */}
