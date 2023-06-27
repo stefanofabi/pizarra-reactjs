@@ -97,7 +97,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="container-fluid App">
       <div className="row">
         {/* Left column */}
         <div className="col-md">
